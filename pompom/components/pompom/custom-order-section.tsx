@@ -8,7 +8,7 @@ import { INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_URL, createWhatsAppMessageLin
 
 const sizes = ['Pequeño', 'Mediano', 'Grande']
 const orderTypes = ['Persona', 'Animal', 'Almohadón', 'Tapiz', 'Flores']
-const colorOptions = ['Rosa', 'Marfil', 'Lavanda', 'Menta', 'Celeste', 'Amarillo', 'Beige', 'Otro']
+const colorOptions = ['Rojo', 'Naranja', 'Amarillo', 'Verde', 'Azul', 'Violeta', 'Rosa', 'Negro', 'Blanco', 'Marrón', 'Otro']
 
 export function CustomOrderSection({ onBack }: { onBack: () => void }) {
   const [selectedSize, setSelectedSize] = useState('')
