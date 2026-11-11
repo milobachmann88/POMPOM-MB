@@ -22,9 +22,9 @@ const collections: {
     title: 'PERSONAJES',
     description: 'Amigurumis tiernos para regalar, coleccionar o acompañar.',
     slides: [
-      { src: '/images/personajes-1.png', alt: 'Amigurumi de conejita rosa tejida a crochet' },
-      { src: '/images/personajes-2.png', alt: 'Amigurumi de gatito blanco y rosa' },
-      { src: '/images/personajes-3.png', alt: 'Amigurumis de osito y ranita en tonos pastel' },
+      { src: '/images/imagenes-pompom/kitty.jpeg', alt: 'Amigurumi de Hello Kitty' },
+      { src: '/images/imagenes-pompom/luffy.jpeg', alt: 'Amigurumi de Luffy (One Piece)' },
+      { src: '/images/imagenes-pompom/spiderman.jpg', alt: 'Amigurumi de Spiderman' },
     ],
   },
   {
@@ -32,9 +32,9 @@ const collections: {
     title: 'TAPICES',
     description: 'Tapices tejidos para darle calidez a cualquier rincón.',
     slides: [
-      { src: '/images/tapices-1.png', alt: 'Tapiz a crochet con carita de gato' },
-      { src: '/images/tapices-2.png', alt: 'Tapiz a crochet con corazón y flores' },
-      { src: '/images/tapices-3.png', alt: 'Tapiz con frutillas y margaritas' },
+      { src: '/images/imagenes-pompom/tapizluna.jpeg', alt: 'Tapiz a crochet con carita de gato' },
+      { src: '/images/imagenes-pompom/tapizconejito.jpeg', alt: 'Tapiz a crochet con corazón y flores' },
+      { src: '/images/imagenes-pompom/tapizlibelula.jpeg', alt: 'Tapiz con frutillas y margaritas' },
     ],
   },
   {
@@ -42,9 +42,9 @@ const collections: {
     title: 'PERSONALIZADOS',
     description: 'Tu idea, tu mascota o tu persona favorita, hecha a crochet.',
     slides: [
-      { src: '/images/personalizados-1.png', alt: 'Muñequita personalizada a crochet' },
-      { src: '/images/personalizados-2.png', alt: 'Réplica a crochet de un perrito' },
-      { src: '/images/personalizados-3.png', alt: 'Pareja de muñecos a crochet para aniversario' },
+      { src: '/images/imagenes-pompom/yo.jpeg', alt: 'Muñequita personalizada a crochet' },
+      { src: '/images/imagenes-pompom/ezra.jpeg', alt: 'Gato como personaje de anime' },
+      { src: '/images/imagenes-pompom/corazon.png', alt: 'Corazón multicolor' },
     ],
   },
 ]

@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://127.0.0.1:8080/api/:path*', // La URL real de tu backend en Kotlin
+      },
+    ]
+  },
   typescript: {
     ignoreBuildErrors: true,
   },

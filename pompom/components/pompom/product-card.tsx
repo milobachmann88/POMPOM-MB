@@ -26,7 +26,7 @@ export function ProductCard({ product }: { product: Product }) {
         >
           <p><span className="font-extrabold">Material:</span> {product.material}</p>
           <p><span className="font-extrabold">Tamaño:</span> {product.size}</p>
-          <p><span className="font-extrabold">Colores:</span> {product.colors.join(', ')}</p>
+          <p><span className="font-extrabold">Otros:</span> {product.colors.join(', ')}</p>
         </div>
       </div>
 

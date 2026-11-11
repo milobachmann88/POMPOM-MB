@@ -7,20 +7,21 @@ export default function useProducto() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function obtenerProducto() {
+    async function traerProductos() {
       try {
-        const data = await obtenerProducto();
-        if (!data.ok) {
+        const data = await obtenerProducto()
+        /*if (!data.ok) {
           throw new Error("Error");
-        }
-      } catch (error) {
+        }*/
+       setProductos(data)
+        } catch (error) {
         console.log(error);
         setError(error);
       } finally {
         setLoading(false);
       }
     }
-    obtenerProducto();
+    traerProductos();
   }, []);
   return { productos, loading, error };
 }

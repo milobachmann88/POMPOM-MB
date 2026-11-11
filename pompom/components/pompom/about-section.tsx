@@ -12,7 +12,7 @@ export function AboutSection() {
           <Reveal className="mx-auto w-full max-w-sm">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] border-8 border-card shadow-[0_20px_40px_-15px_rgb(199_52_99/0.45)] transition-transform duration-500 hover:rotate-1">
               <Image
-                src="/images/creadora.png"
+                src="/images/imagenes-pompom/creadora.jpeg"
                 alt="La creadora de PomPom tejiendo a crochet"
                 fill
                 sizes="(min-width: 768px) 384px, 90vw"
