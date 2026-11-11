@@ -12,6 +12,16 @@ export type Product = {
   colors: string[]
 }
 
+export interface ProductoResponseDto {
+  id: number
+  nombre: string
+  descripcion: string | null
+  categoria: string | null
+  precio: number // Al serializar con ToStringSerializer, TypeScript puede leerlo como número o string (lo manejamos flexible)
+  stock: number
+  activo: boolean
+}
+
 export const PRODUCT_CATALOG: Product[] = [
   {
     id: 'coraline',

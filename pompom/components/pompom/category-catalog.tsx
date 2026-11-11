@@ -10,6 +10,7 @@ export function CategoryCatalog({ category, onBack }: { category: ProductCategor
   const collection = PRODUCT_CATEGORIES[category]
   const products = PRODUCT_CATALOG.filter((product) => product.category === category)
 
+
   return (
     <div className="animate-in fade-in duration-300">
       <button

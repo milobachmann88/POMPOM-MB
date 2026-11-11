@@ -10,10 +10,11 @@ export default function useProducto() {
     async function traerProductos() {
       try {
         const data = await obtenerProducto()
-        /*if (!data.ok) {
+      /*  if (!data.ok) {
           throw new Error("Error");
         }*/
-       setProductos(data)
+       console.log(productos)
+       setProductos(data.content)
         } catch (error) {
         console.log(error);
         setError(error);

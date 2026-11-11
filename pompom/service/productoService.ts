@@ -6,5 +6,5 @@ export async function obtenerProducto(){
     if (!respuesta.ok){
         throw new Error("Error")
     }
-    return respuesta.json
+    return respuesta.json()
 }

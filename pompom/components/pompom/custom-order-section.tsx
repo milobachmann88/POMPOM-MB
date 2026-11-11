@@ -51,9 +51,9 @@ export function CustomOrderSection({ onBack }: { onBack: () => void }) {
 
       <SectionTitle id="custom-order-title">PERSONALIZADOS</SectionTitle>
       <div className="mx-auto mb-9 max-w-2xl text-center">
-        <p className="font-script text-4xl leading-tight text-primary md:text-5xl">Tu idea, tejida a mano</p>
+        <p className="mt-4 text-xl font-black text-primary md:text-5xl">Tu idea, tejida a mano</p>
         <p className="mt-3 text-base font-semibold leading-relaxed text-muted-foreground">
-          Contame qué imaginás y armamos juntas una pieza especial, hecha con mucho amor.
+          Contame qué imaginás y armamos juntos una pieza especial, hecha con mucho amor.
         </p>
       </div>
 
