@@ -58,9 +58,13 @@ export async function obtenerProductos(): Promise<Product[]> {
     if (!respuesta.ok) {
       throw new Error("Error al obtener los productos")
     }
-    const data: ProductoResponseDto[] = await respuesta.json()
+    const rawData = await respuesta.json()
 
-    const productosMapeados = data.map((dto) => {
+    const listaProductos: ProductoResponseDto[] = Array.isArray(rawData) 
+      ? rawData 
+      : (rawData.content || [])
+
+    const productosMapeados = listaProductos.map((dto) => {
       let parsedColors: string[] = []
       try {
         parsedColors = dto.colores ? JSON.parse(dto.colores) : []
