@@ -4,12 +4,33 @@ import { ArrowLeft, Heart } from 'lucide-react'
 import { Reveal } from './reveal'
 import { SectionTitle } from './section-title'
 import { ProductCard } from './product-card'
-import { PRODUCT_CATALOG, PRODUCT_CATEGORIES, type ProductCategory } from './product-catalog'
+import { useEffect, useState } from 'react'
+import { obtenerProductos, PRODUCT_CATEGORIES, type ProductCategory , type Product } from './product-catalog'
 
 export function CategoryCatalog({ category, onBack }: { category: ProductCategory; onBack: () => void }) {
   const collection = PRODUCT_CATEGORIES[category]
-  const products = PRODUCT_CATALOG.filter((product) => product.category === category)
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    async function loadProducts() {
+      setLoading(true)
+      const allProducts = await obtenerProductos()
+      // Filtramos solo los productos que corresponden a esta categoría
+      const filtered = allProducts.filter((product) => product.category === category)
+      setProducts(filtered)
+      setLoading(false)
+    }
+    loadProducts()
+  }, [category])
+
+  if (loading) {
+    return (
+      <div className="text-center py-16 animate-pulse">
+        <p className="text-lg font-bold text-primary">Cargando productos de {collection?.title || category}... 🧶</p>
+      </div>
+    )
+  }
 
   return (
     <div className="animate-in fade-in duration-300">
