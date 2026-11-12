@@ -49,7 +49,18 @@ export function ProductCard({ product }: { product: Product }) {
         <button
           type="button"
           aria-describedby={detailsId}
-          onClick={() => addItem(product.id)}
+          onClick={(e) => {
+            e.stopPropagation() 
+            //console.log("Click real en el botón de la tarjeta");
+            const target = e.currentTarget
+            if (target.dataset.adding === 'true') return
+            target.dataset.adding = 'true'
+            addItem(product.id)
+            setTimeout(() => {
+              target.dataset.adding = 'false'
+            }, 400)
+          }}
+            
           className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-extrabold text-primary-foreground shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         >
           <ShoppingBag className="size-4" aria-hidden="true" />

@@ -43,7 +43,7 @@ const collections: {
     description: 'Tu idea, tu mascota o tu persona favorita, hecha a crochet.',
     slides: [
       { src: '/images/imagenes-pompom/yo.jpeg', alt: 'Muñequita personalizada a crochet' },
-      { src: '/images/imagenes-pompom/ezra.png', alt: 'Gato como personaje de anime' },
+      { src: '/images/imagenes-pompom/ezra.jpeg', alt: 'Gato como personaje de anime' },
       { src: '/images/imagenes-pompom/corazon.png', alt: 'Corazón multicolor' },
     ],
   },

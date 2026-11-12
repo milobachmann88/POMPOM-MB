@@ -1,11 +1,11 @@
 'use client'
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { PRODUCT_CATALOG, type Product } from './product-catalog'
+import { PRODUCT_CATALOG, obtenerProductos, type Product } from './product-catalog'
 
 export type DeliveryPoint = 'Parque Brown' | 'Coto de Lugano' | 'Otro'
 
-type CartLine = { productId: string; quantity: number }
+type CartLine = { productId: string | number; quantity: number }
 type CartItem = { product: Product; quantity: number }
 type CartContextValue = {
   items: CartItem[]
@@ -13,9 +13,9 @@ type CartContextValue = {
   total: number
   isCartOpen: boolean
   deliveryPoint: DeliveryPoint | ''
-  addItem: (productId: string) => void
-  updateQuantity: (productId: string, quantity: number) => void
-  removeItem: (productId: string) => void
+  addItem: (productId: string | number) => void
+  updateQuantity: (productId: string | number, quantity: number) => void
+  removeItem: (productId: string | number) => void
   openCart: () => void
   closeCart: () => void
   setDeliveryPoint: (point: DeliveryPoint | '') => void
@@ -24,10 +24,10 @@ type CartContextValue = {
 const CART_STORAGE_KEY = 'pompom-cart-v1'
 const MAX_ITEM_QUANTITY = 99
 const validDeliveryPoints: DeliveryPoint[] = ['Parque Brown', 'Coto de Lugano', 'Otro']
-const productIds = new Set(PRODUCT_CATALOG.map((product) => product.id))
+
 const CartContext = createContext<CartContextValue | null>(null)
 
-function restoreCart(value: string | null): { lines: CartLine[]; deliveryPoint: DeliveryPoint | '' } {
+function restoreCart(value: string | null, availableProducts: Product[]): { lines: CartLine[]; deliveryPoint: DeliveryPoint | '' } {
   if (!value) return { lines: [], deliveryPoint: '' }
 
   try {
@@ -35,22 +35,27 @@ function restoreCart(value: string | null): { lines: CartLine[]; deliveryPoint: 
     if (!stored || typeof stored !== 'object') return { lines: [], deliveryPoint: '' }
 
     const record = stored as Record<string, unknown>
+    const validIds = new Set(availableProducts.map((p) => p.id))
+    
     const lines = Array.isArray(record.items)
       ? record.items.flatMap((entry): CartLine[] => {
           if (!entry || typeof entry !== 'object') return []
           const item = entry as Record<string, unknown>
+          const pId = item.productId as string | number
+
           if (
-            typeof item.productId !== 'string' ||
-            !productIds.has(item.productId) ||
+            (typeof pId !== 'string' && typeof pId !== 'number') ||
+            !validIds.has(pId) ||
             typeof item.quantity !== 'number' ||
             !Number.isInteger(item.quantity) ||
             item.quantity < 1
           ) {
             return []
           }
-          return [{ productId: item.productId, quantity: Math.min(item.quantity, MAX_ITEM_QUANTITY) }]
+          return [{ productId: pId, quantity: Math.min(item.quantity, MAX_ITEM_QUANTITY) }]
         })
       : []
+
     const deliveryPoint = validDeliveryPoints.includes(record.deliveryPoint as DeliveryPoint)
       ? (record.deliveryPoint as DeliveryPoint)
       : ''
@@ -63,21 +68,29 @@ function restoreCart(value: string | null): { lines: CartLine[]; deliveryPoint: 
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([])
+  const [products, setProducts] = useState<Product[]>(PRODUCT_CATALOG)
   const [deliveryPoint, setDeliveryPoint] = useState<DeliveryPoint | ''>('')
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isStorageReady, setIsStorageReady] = useState(false)
 
+  
   useEffect(() => {
-    try {
-      const restored = restoreCart(window.localStorage.getItem(CART_STORAGE_KEY))
-      setLines(restored.lines)
-      setDeliveryPoint(restored.deliveryPoint)
-    } catch {
-      setLines([])
-      setDeliveryPoint('')
-    } finally {
-      setIsStorageReady(true)
+    async function initCart() {
+      const fetchedProducts = await obtenerProductos()
+      setProducts(fetchedProducts)
+
+      try {
+        const restored = restoreCart(window.localStorage.getItem(CART_STORAGE_KEY), fetchedProducts)
+        setLines(restored.lines)
+        setDeliveryPoint(restored.deliveryPoint)
+      } catch {
+        setLines([])
+        setDeliveryPoint('')
+      } finally {
+        setIsStorageReady(true)
+      }
     }
+    initCart()
   }, [])
 
   useEffect(() => {
@@ -85,16 +98,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     try {
       window.localStorage.setItem(CART_STORAGE_KEY, JSON.stringify({ items: lines, deliveryPoint }))
     } catch {
-      // The in-memory cart remains usable if browser storage is unavailable.
+      // Ignorar errores de storage
     }
   }, [deliveryPoint, isStorageReady, lines])
 
-  const addItem = useCallback((productId: string) => {
-    if (!productIds.has(productId)) return
-    setLines((current) => {
-      const existing = current.find((line) => line.productId === productId)
-      if (!existing) return [...current, { productId, quantity: 1 }]
-      return current.map((line) =>
+  const addItem = useCallback((productId: string | number) => {
+    setLines((currentLines) => {
+      const existing = currentLines.find((line) => line.productId === productId)
+      
+      if (!existing) {
+        return [...currentLines, { productId, quantity: 1 }]
+      }
+      
+      return currentLines.map((line) =>
         line.productId === productId
           ? { ...line, quantity: Math.min(line.quantity + 1, MAX_ITEM_QUANTITY) }
           : line,
@@ -103,7 +119,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true)
   }, [])
 
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
+  const updateQuantity = useCallback((productId: string | number, quantity: number) => {
     const nextQuantity = Math.trunc(quantity)
     if (nextQuantity < 1) {
       setLines((current) => current.filter((line) => line.productId !== productId))
@@ -118,18 +134,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     )
   }, [])
 
-  const removeItem = useCallback((productId: string) => {
+  const removeItem = useCallback((productId: string | number) => {
     setLines((current) => current.filter((line) => line.productId !== productId))
   }, [])
 
   const items = useMemo(
     () =>
       lines.flatMap((line) => {
-        const product = PRODUCT_CATALOG.find((entry) => entry.id === line.productId)
+        const product = products.find((entry) => entry.id === line.productId)
         return product ? [{ product, quantity: line.quantity }] : []
       }),
-    [lines],
+    [lines, products],
   )
+
   const count = items.reduce((amount, item) => amount + item.quantity, 0)
   const total = items.reduce((amount, item) => amount + item.product.price * item.quantity, 0)
 
